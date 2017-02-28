@@ -1,0 +1,8 @@
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\obj\Debug\Addin.AddinResources.resources
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\obj\Debug\DAXDUtil_Addin_AutoNewLabels.csproj.GenerateResource.Cache
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\bin\Debug\Microsoft.Dynamics.AX.Metadata.dll
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\bin\Debug\D365O.Addin.AutoNewLabels.xml
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\bin\Debug\D365O.Addin.AutoNewLabels.dll
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\bin\Debug\D365O.Addin.AutoNewLabels.pdb
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\obj\Debug\D365O.Addin.AutoNewLabels.dll
+C:\Users\Administrator\documents\visual studio 2015\Projects\DAXDUtil_Addin_AutoNewLabels\DAXDUtil_Addin_AutoNewLabels\obj\Debug\D365O.Addin.AutoNewLabels.pdb
