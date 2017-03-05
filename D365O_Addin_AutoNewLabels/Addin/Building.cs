@@ -9,6 +9,7 @@ using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Menus;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Security;
 
 namespace Building
 {
@@ -73,6 +74,9 @@ namespace Building
 
                 case "Form":
                     return new CreateLabels_Form(element as Form);
+
+                case "SecurityPrivilege":
+                    return new CreateLabels_SecurityPrivilege(element as SecurityPrivilege);
 
                 default:
                     throw new NotImplementedException($"The type {element.GetType().Name} is not implemented.");
@@ -485,6 +489,35 @@ namespace Building
 
                 control.HelpText = this.labelManager.createLabel(control.HelpText);
             }
+        }
+    }
+
+    /// <summary>
+    /// Creates labels to security privileges and child elements
+    /// </summary>
+    public class CreateLabels_SecurityPrivilege : CreateLabels
+    {
+        /// <summary>
+        /// Global variable representing the current menuitem
+        /// </summary>
+        protected SecurityPrivilege securityPrivilege;
+
+        /// <summary>
+        /// Initiaze the global variable
+        /// </summary>
+        /// <param name="securityPrivilege">Selected SecurityPrivilege element</param>
+        public CreateLabels_SecurityPrivilege(SecurityPrivilege securityPrivilege)
+        {
+            this.securityPrivilege = securityPrivilege;
+        }
+
+        /// <summary>
+        /// Run the process
+        /// </summary>
+        public override void run()
+        {
+            // Label
+            this.securityPrivilege.Label = this.labelManager.createLabel(this.securityPrivilege.Label);
         }
     }
 }

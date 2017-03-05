@@ -79,7 +79,7 @@ namespace Labeling
                         System.IO.StreamWriter writer = new System.IO.StreamWriter(labelfile.LocalPath(), true);
 
                         writer.WriteLine($"{labelId}={label}");
-                        writer.WriteLine($" ;");
+                        //writer.WriteLine($" ;");
                         writer.Close();
 
                         this.log(labelId, label, labelfile.Name);
