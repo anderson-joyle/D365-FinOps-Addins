@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +20,9 @@ namespace Building
             this.menuItem = menuItem;
         }
 
+        /// <summary>
+        /// Execute routine
+        /// </summary>
         public void run()
         {
             UserInterface userInterface = new UserInterface();
@@ -60,7 +63,7 @@ namespace Building
                         grant = AccessGrant.ConstructGrantCreate();
                         break;
                     case "CORRECT":
-                        sufix = "Corret";
+                        sufix = "Correct";
                         grant = AccessGrant.ConstructGrantCorrect();
                         break;
                     case "DELETE":
@@ -78,7 +81,13 @@ namespace Building
 
         }
 
-        public void create(string name, AccessGrant grant)
+        /// <summary>
+        /// Create privilege in AOT
+        /// </summary>
+        /// <param name="name">Privilege's name</param>
+        /// <param name="grant">User chosen privilege access level</param>
+        /// <remarks>This method could be improved. Most probably are better ways to achieve this goal.</remarks>
+        protected void create(string name, AccessGrant grant)
         {
             AxSecurityPrivilege privilege = new AxSecurityPrivilege();
             AxSecurityEntryPointReference entryPoint = new AxSecurityEntryPointReference();
@@ -112,7 +121,8 @@ namespace Building
             privilege.EntryPoints.Add(entryPoint);
             #endregion
 
-            #region Add to active project
+            // Most probably there is a better way to do this part.
+            #region Add to AOT
             modelInfo = project.GetProjectsModelInfo();
 
             modelSaveInfo.Id = modelInfo.Id;
@@ -122,10 +132,20 @@ namespace Building
             var metaModelService = metaModelProviders.CurrentMetaModelService;
 
             metaModelService.CreateSecurityPrivilege(privilege, modelSaveInfo);
+            #endregion
 
+            this.appendToProject(privilege);
+        }
+
+        /// <summary>
+        /// Append created privilege to active project
+        /// </summary>
+        /// <param name="privilege">Recently created privilege</param>
+        /// <remarks>This method could be improved. Most probably are better ways to achieve this goal.</remarks>
+        protected void appendToProject(AxSecurityPrivilege privilege)
+        {
             var projectService = ServiceLocator.GetService(typeof(IDynamicsProjectService)) as IDynamicsProjectService;
             projectService.AddElementToActiveProject(privilege);
-            #endregion
         }
     }
 }
