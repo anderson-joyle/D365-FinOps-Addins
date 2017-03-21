@@ -21,7 +21,7 @@ namespace Building
         }
 
         /// <summary>
-        /// Execute routine
+        /// Executes routine
         /// </summary>
         public void run()
         {
@@ -82,7 +82,7 @@ namespace Building
         }
 
         /// <summary>
-        /// Create privilege in AOT
+        /// Creates privilege in AOT
         /// </summary>
         /// <param name="name">Privilege's name</param>
         /// <param name="grant">User chosen privilege access level</param>
@@ -138,7 +138,7 @@ namespace Building
         }
 
         /// <summary>
-        /// Append created privilege to active project
+        /// Appends created privilege to active project
         /// </summary>
         /// <param name="privilege">Recently created privilege</param>
         /// <remarks>This method could be improved. Most probably are better ways to achieve this goal.</remarks>
