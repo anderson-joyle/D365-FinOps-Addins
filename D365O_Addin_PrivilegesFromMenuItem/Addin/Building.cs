@@ -99,6 +99,7 @@ namespace Building
             entryPoint.Name = this.menuItem.Name;
             entryPoint.Grant = grant;
             entryPoint.ObjectName = this.menuItem.Name;
+
             switch (this.menuItem.ObjectType)
             {
                 case MenuItemObjectType.Form:
@@ -119,6 +120,7 @@ namespace Building
             #region Create privilege
             privilege.Name = name;
             privilege.EntryPoints.Add(entryPoint);
+            privilege.Label = this.menuItem.Label;
             #endregion
 
             // Most probably there is a better way to do this part.
@@ -138,7 +140,7 @@ namespace Building
         }
 
         /// <summary>
-        /// Appends created privilege to active project
+        /// Append createds privilege to active project
         /// </summary>
         /// <param name="privilege">Recently created privilege</param>
         /// <remarks>This method could be improved. Most probably are better ways to achieve this goal.</remarks>
