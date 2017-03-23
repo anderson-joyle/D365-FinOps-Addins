@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Menus;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Security;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Workflows;
 
 namespace Building
 {
@@ -77,6 +78,21 @@ namespace Building
 
                 case "SecurityPrivilege":
                     return new CreateLabels_SecurityPrivilege(element as SecurityPrivilege);
+
+                case "WorkflowHierarchyAssignmentProvider":
+                    return new CreateLabels_WorkflowHierarchyAssignmentProvider(element as WorkflowHierarchyAssignmentProvider);
+
+                case "WorkflowApproval":
+                    return new CreateLabels_WorkflowApproval(element as WorkflowApproval);
+
+                case "WorkflowCategory":
+                    return new CreateLabels_WorkflowCategory(element as WorkflowCategory);
+
+                case "WorkflowTask":
+                    return new CreateLabels_WorkflowTask(element as WorkflowTask);
+
+                case "WorkflowTemplate"://WorkflowType Object
+                    return new CreateLabels_WorkflowType(element as WorkflowTemplate);
 
                 default:
                     throw new NotImplementedException($"The type {element.GetType().Name} is not implemented.");
@@ -352,7 +368,7 @@ namespace Building
             foreach (FormControl control in this.form.FormDesign.FormControls)
             {
                 switch (control.Type)
-                {                    
+                {
                     case Microsoft.Dynamics.AX.Metadata.Core.MetaModel.FormControlType.String:
                         FormStringControl stringControl = control as FormStringControl;
                         stringControl.Label = this.labelManager.createLabel(stringControl.Label);
@@ -402,7 +418,7 @@ namespace Building
                         FormRadioButtonControl radioControl = control as FormRadioButtonControl;
                         radioControl.Caption = this.labelManager.createLabel(radioControl.Caption);
                         break;
-                        
+
                     case Microsoft.Dynamics.AX.Metadata.Core.MetaModel.FormControlType.ButtonGroup:
                         FormButtonGroupControl buttonGroupCaption = control as FormButtonGroupControl;
                         buttonGroupCaption.Caption = this.labelManager.createLabel(buttonGroupCaption.Caption);
@@ -432,7 +448,7 @@ namespace Building
                         FormListBoxControl listboxControl = control as FormListBoxControl;
                         listboxControl.Label = this.labelManager.createLabel(listboxControl.Label);
                         break;
-                        
+
                     case Microsoft.Dynamics.AX.Metadata.Core.MetaModel.FormControlType.Time:
                         FormTimeControl timeControl = control as FormTimeControl;
                         timeControl.Label = this.labelManager.createLabel(timeControl.Label);
@@ -520,4 +536,164 @@ namespace Building
             this.securityPrivilege.Label = this.labelManager.createLabel(this.securityPrivilege.Label);
         }
     }
+
+    /// <summary>
+    /// Creates labels to workflow object
+    /// </summary>
+    public class CreateLabels_WorkflowHierarchyAssignmentProvider : CreateLabels
+    {
+        /// <summary>
+        /// Global variable representing the current provider
+        /// </summary>
+        protected WorkflowHierarchyAssignmentProvider provider;
+
+        /// <summary>
+        /// Initiaze the global variable
+        /// </summary>
+        /// <param name="provider">Selected provider element</param>
+        public CreateLabels_WorkflowHierarchyAssignmentProvider(WorkflowHierarchyAssignmentProvider provider)
+        {
+            this.provider = provider;
+        }
+
+        /// <summary>
+        /// Run the process
+        /// </summary>
+        public override void run()
+        {
+            // Label
+            this.provider.Label = this.labelManager.createLabel(this.provider.Label);
+
+            // Help text
+            this.provider.HelpText = this.labelManager.createLabel(this.provider.HelpText);
+        }
+    }
+
+    /// <summary>
+    /// Creates labels to workflow object
+    /// </summary>
+    public class CreateLabels_WorkflowApproval : CreateLabels
+    {
+        /// <summary>
+        /// Global variable representing the current approval
+        /// </summary>
+        protected WorkflowApproval approval;
+
+        /// <summary>
+        /// Initiaze the global variable
+        /// </summary>
+        /// <param name="approval">Selected approval element</param>
+        public CreateLabels_WorkflowApproval(WorkflowApproval approval)
+        {
+            this.approval = approval;
+        }
+
+        /// <summary>
+        /// Run the process
+        /// </summary>
+        public override void run()
+        {
+            // Label
+            this.approval.Label = this.labelManager.createLabel(this.approval.Label);
+
+            // Help text
+            this.approval.HelpText = this.labelManager.createLabel(this.approval.HelpText);
+        }
+    }
+    /// <summary>
+    /// Creates labels to workflow object
+    /// </summary>
+    public class CreateLabels_WorkflowCategory : CreateLabels
+    {
+        /// <summary>
+        /// Global variable representing the current category
+        /// </summary>
+        protected WorkflowCategory category;
+
+        /// <summary>
+        /// Initiaze the global variable
+        /// </summary>
+        /// <param name="category">Selected category element</param>
+        public CreateLabels_WorkflowCategory(WorkflowCategory category)
+        {
+            this.category = category;
+        }
+
+        /// <summary>
+        /// Run the process
+        /// </summary>
+        public override void run()
+        {
+            // Label
+            this.category.Label = this.labelManager.createLabel(this.category.Label);
+
+            // Help text
+            this.category.HelpText = this.labelManager.createLabel(this.category.HelpText);
+        }
+    }
+
+    /// <summary>
+    /// Creates labels to workflow object
+    /// </summary>
+    public class CreateLabels_WorkflowTask : CreateLabels
+    {
+        /// <summary>
+        /// Global variable representing the current task
+        /// </summary>
+        protected WorkflowTask task;
+
+        /// <summary>
+        /// Initiaze the global variable
+        /// </summary>
+        /// <param name="category">Selected task element</param>
+        public CreateLabels_WorkflowTask(WorkflowTask task)
+        {
+            this.task = task;
+        }
+
+        /// <summary>
+        /// Run the process
+        /// </summary>
+        public override void run()
+        {
+            // Label
+            this.task.Label = this.labelManager.createLabel(this.task.Label);
+
+            // Help text
+            this.task.HelpText = this.labelManager.createLabel(this.task.HelpText);
+        }
+    }
+
+    /// <summary>
+    /// Creates labels to workflow object
+    /// </summary>
+    public class CreateLabels_WorkflowType : CreateLabels
+    {
+        /// <summary>
+        /// Global variable representing the current type
+        /// </summary>
+        protected WorkflowTemplate type;
+
+        /// <summary>
+        /// Initiaze the global variable
+        /// </summary>
+        /// <param name="type">Selected task element</param>
+        public CreateLabels_WorkflowType(WorkflowTemplate type)
+        {
+            this.type = type;
+        }
+
+        /// <summary>
+        /// Run the process
+        /// </summary>
+        public override void run()
+        {
+            // Label
+            this.type.Label = this.labelManager.createLabel(this.type.Label);
+
+            // Help text
+            this.type.HelpText = this.labelManager.createLabel(this.type.HelpText);
+        }
+    }
+
 }
