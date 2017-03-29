@@ -12,6 +12,8 @@
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.LabelFiles;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Menus;
+    using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Workflows;
+    using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Security;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
     /// <summary>
@@ -26,6 +28,12 @@
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IMenuItem))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IView))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IForm))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(ISecurityPrivilege))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IWorkflowHierarchyAssignmentProvider))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IWorkflowApproval))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IWorkflowTask))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IWorkflowCategory))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(IWorkflowTemplate))]
     public class DesignerContextMenuAddIn : DesignerMenuBase
     {
         #region Member variables
