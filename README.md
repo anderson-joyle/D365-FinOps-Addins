@@ -1,4 +1,6 @@
-![D365O Add-in](https://github.com/anderson-joyle/D365O-Addins/blob/master/D365O_Addin_logo.png)
+![D365O Add-in](https://github.com/anderson-joyle/D365O-Addins/blob/master/D365O_addin_logo.png)
+
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/joyle)
 
 Dynamics 365 for Operation addins. Addins to give a hand at development time. 
 
