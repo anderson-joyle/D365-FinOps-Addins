@@ -1,5 +1,6 @@
 ![D365O Add-in](https://github.com/anderson-joyle/D365O-Addins/blob/master/D365O_addin_logo.png)
 
+[![Donate Crypto](https://img.shields.io/badge/Donate-Crypto-805AFF.svg)](https://github.com/anderson-joyle/D365O-Addins#donate)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/joyle)
 
 Dynamics 365 for Operation addins. Addins to give a hand at development time. 
@@ -22,3 +23,10 @@ It is easy to get started writing your own addins. Just open Visual Studio, crea
 You are more than welcome to contribute!
 
 > PS. part of this text was copied from [SSMS Visual Studio add-in](https://github.com/Microsoft/ssms-visualstudio-addin)
+
+## Donate
+If this project helped you in any way and you feel like supporting me:
+
+###### BTC: 1G3rHge15Kt1G8Amh2ZfNeH5pp1L3CFGmm
+###### ETH: LMdh66L6tv19YLxbVgP1t47eocitSHhw5S
+###### LTC: 0x9c8A747C13536b1de9Ce932E0f79FA4eB6E309b6
