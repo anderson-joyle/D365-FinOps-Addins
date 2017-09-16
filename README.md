@@ -15,7 +15,7 @@ Note: You will need to restart Visual Studio to get access to the new add-in.
 
 ## Using the tool
 
-Once the tool is built and deployed as described above, it is available in the addins menu in the Dynamics 365 menu. This particular addin is designed to be applied on a selected designer node, so you have to open the table in the designer to use it; you cannot use it directly from the Application Explorer at this time.
+Once the tool is built and deployed as described above, it is available in the addins menu in the Dynamics 365 menu or applied on a selected designer node.
 Creating Add-ins of your own
 
 It is easy to get started writing your own addins. Just open Visual Studio, create a new project and choose the template called "Developer tools Addin" from the "Dynamics 365 for Operations" set. This will create a project with examples of both a Mainmenu addin (i.e. an addin that is visible on the Addins menu on the Dynamics 365 menu, and that is not tied to any particular metadata artifact), and a Designer addin which is appears when a particular artifact is selected in the designer. There are TODO comments indicating where you should put your code.
