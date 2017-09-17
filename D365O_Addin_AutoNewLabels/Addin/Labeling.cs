@@ -1,50 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using Microsoft.Dynamics.Framework.Tools.Extensibility;
+using Microsoft.Dynamics.Framework.Tools.Labels;
+using Microsoft.Dynamics.Framework.Tools.ProjectSystem;
 
 namespace Labeling
 {
     public class LabelManager
     {
         protected const string PREFIX = "@@@";
-        protected const string LABELFILEID = "LabelFileJYL"; // TODO: change to your label file name
+        protected const string LABELFILEID = "MyLabel"; // TODO: change to your label file name
         private Logging.Logging logging { get; }
 
         private List<AxLabelFile> labelFiles;
-        private Dictionary<string,string> labelContents;
+
+        protected EnvDTE.DTE dte;
+        protected VSApplicationContext context;
 
         public LabelManager()
         {
             this.logging = new Logging.Logging();
             this.labelFiles = new List<AxLabelFile>();
-            this.labelContents = new Dictionary<string, string>();
+            
+            this.dte = CoreUtility.ServiceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+            this.context = new VSApplicationContext(dte);
 
+            // Todo Declarer all labels files here
             // Initialize label files (each languages)
             // Most likely there is a better way to get the AxLabelFile elements.
             // This works only if the label files are in the same model than the other elements.
-            // Use CreateLabels.model(modelname) otherwise.
+            // Use LabelManager.model(modelname) otherwise.
             this.labelFiles.Add(LabelManager.currentModel().GetLabelFile($"{LABELFILEID}_{"en-GB"}"));
             this.labelFiles.Add(LabelManager.currentModel().GetLabelFile($"{LABELFILEID}_{"en-US"}"));
-
-            this.initContents();
-        }
-
-        private void initContents()
-        {
-            foreach (AxLabelFile labelfile in this.labelFiles)
-            {
-                var reader = new System.IO.StreamReader(labelfile.LocalPath());
-                string content = reader.ReadToEnd();
-
-                reader.Close();
-
-                this.labelContents[labelfile.Name] = content;
-            }
+            
         }
 
         /// <summary>
@@ -58,11 +52,11 @@ namespace Labeling
         }
 
         /// <summary>
-        /// If property text is prefixed, then create a new label. Otherwise, return the very same property text value
+        /// If property text is prefixed, then create a new label.
+        /// Otherwise, return the very same property text value
         /// </summary>
         /// <param name="propertyText">Label text from element property (label, help text, caption, etc)</param>
         /// <returns>The new label id created</returns>
-        /// <remarks>TODO: This is messed up. Needs to prettify.</remarks>
         public string createLabel(string propertyText)
         {
             string ret = propertyText;
@@ -74,16 +68,15 @@ namespace Labeling
 
                 foreach (AxLabelFile labelfile in this.labelFiles)
                 {
-                    if (!this.exist(labelId, labelfile.Name))
-                    {
-                        System.IO.StreamWriter writer = new System.IO.StreamWriter(labelfile.LocalPath(), true);
+                    LabelControllerFactory factory = new LabelControllerFactory();
+                    LabelEditorController labelEditorController = factory.GetOrCreateLabelController(labelfile, context);
 
-                        writer.WriteLine($"{labelId}={label}");
-                        //writer.WriteLine($" ;");
-                        writer.Close();
+                    if (!labelEditorController.Exists(labelId))
+                    {
+                        labelEditorController.Insert(labelId, label, string.Empty);
+                        labelEditorController.Save();
 
                         this.log(labelId, label, labelfile.Name);
-                        this.add2LocalContent(labelId, labelfile.Name);
                     }
                 }
 
@@ -108,39 +101,6 @@ namespace Labeling
             singleLog.labelFile = labelFileName;
 
             this.logging.add(singleLog);
-        }
-         
-        /// <summary>
-        /// Add the recently create label id to local label content
-        /// </summary>
-        /// <param name="labelId">Label id</param>
-        /// <param name="labelFileName">Label file name</param>
-        /// <remarks>The ideia is to simulate the creating of a new label into the file, w/o modifing the file for real.</remarks>
-        private void add2LocalContent(string labelId, string labelFileName)
-        {
-            if (!this.exist(labelId, labelFileName))
-            {
-                this.labelContents[labelFileName] += labelId;
-            }
-        }
-
-        /// <summary>
-        /// Check if the label id already exist on label file
-        /// </summary>
-        /// <param name="labelId">Label id to check</param>
-        /// <param name="labelFileName">Label file name</param>
-        /// <returns>True if label id exists on local content variable</returns>
-        /// <remarks>This method is public to make it available to test project</remarks>
-        public bool exist(string labelId, string labelFileName)
-        {
-            bool ret = false;
-
-            if (this.labelContents[labelFileName].Contains(($"{labelId}=")))
-            {
-                ret = true;
-            }
-
-            return ret;
         }
 
         /// <summary>
