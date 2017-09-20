@@ -66,6 +66,7 @@
     <Compile Include="FormBase.Designer.cs">
       <DependentUpon>FormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormController.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

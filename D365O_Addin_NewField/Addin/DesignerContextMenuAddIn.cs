@@ -56,13 +56,11 @@
             try
             {
                 NamedElement element = e.SelectedElement as NamedElement;
-                FormMain formMain = new FormMain(element.Name);
+                FormController controller = new FormController();
 
-                formMain.ShowDialog();
-
-                if (formMain.closeOk)
+                if (controller.prompt())
                 {
-                    Building.NewFieldEngine engine = new Building.NewFieldEngine(formMain.getNewField(), element);
+                    Building.NewFieldEngine engine = new Building.NewFieldEngine(controller, element);
                     engine.run();
                 }
             }
