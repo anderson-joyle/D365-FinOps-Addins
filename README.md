@@ -7,6 +7,8 @@ Dynamics 365 for Operation addins. Addins to give a hand at development time.
 
 Kindly note that there are much that can improved. Since that there is no official documentation for add-ins and tons of DLLs available, very likely there are clever ways to use the resources.
 
+:warning: **Kindly take a look at [issues](https://github.com/anderson-joyle/D365O-Addins/issues) page to be aware of known issues and future improvements.**
+
 ## Building the tool
 
 The code should be easy to build in Visual Studio once you fix up the references to point to the place where your product specific assemblies live. The output from a successful compilation is an assembly that can subsequently be deployed using the batch file that is part of the project. Currently the command file is run when the compilation is completed. If this is not what you want, you can change the post-build event command line in the Build Events tab in the project properties.
