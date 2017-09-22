@@ -179,8 +179,9 @@
                     message += "\n\n";
                     message += $"Total: {counter}";
                     message += "\n\n";
-                    message += "==================== QUERY ====================\n";
+                    message += "==================  USED QUERY  ===================\n";
                     message += result.ToString();
+                    message += "===============================================";
 
                     CoreUtility.DisplayInfo(message);
                 }
