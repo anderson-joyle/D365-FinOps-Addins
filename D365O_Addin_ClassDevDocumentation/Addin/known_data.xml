@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <knownnames>
+    <knownname name="construct" description="Init new {0} class instance" />
+    <knownname name="run" description="Execute class business logic" />
+    <knownname name="calc" description="Execute all value calculation" />
+    <knownname name="new" description="Init class object" />
+  </knownnames>
+  <knownprefixes>
+    <knownprefix prefix="calc" description="Calculate {0}" />
+    <knownprefix prefix="get" description="Get {0}" />
+    <knownprefix prefix="set" description="Set {0}" />
+  </knownprefixes>
+</resources>

@@ -63,6 +63,9 @@
   <ItemGroup>
     <None Include="InstallToVS.bat" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="known_data.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(INETROOT)\build\msbuild\MS.Dynamics.Build.Targets" Condition=" '$(INETROOT)' != '' " />
   <Import Project="$(INETROOT)\Source\Frameworks\DevToolsVS12\common\Microsoft.Dynamics.Framework.Tools.Extensibility.Targets" Condition=" '$(INETROOT)' != '' " />
