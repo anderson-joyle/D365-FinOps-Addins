@@ -11,7 +11,7 @@ using Metadata = Microsoft.Dynamics.AX.Metadata;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
 
-using Extracting;
+using Decorating;
 
 namespace Building
 {
@@ -85,17 +85,18 @@ namespace Building
 
             foreach (AxMethod method in axClass.Methods)
             {
+                IContent tagContent = null;
                 string devDoc = string.Empty;
 
                 if (!method.Source.Contains("<summary>"))
                 {
-                    devDoc += this.tag(new TagSummary(method));
-                    devDoc += this.tag(new TagParam(method));
-                    devDoc += this.tag(new TagException(method));
-                    devDoc += this.tag(new TagReturns(method));
-                    devDoc += this.tag(new TagRemarks(method));
+                    tagContent = new SummaryTag(method);
+                    tagContent = new ParamTag(tagContent, method);
+                    tagContent = new ExceptionTag(tagContent, method);
+                    tagContent = new ReturnsTag(tagContent, method);
+                    tagContent = new RemarksTag(tagContent, method);
 
-                    method.Source = method.Source.Insert(0, devDoc);
+                    method.Source = method.Source.Insert(0, $"{tagContent.getContent()}\n");
                     
                     allMethodsDocumented = false; // Shame on you! :(
                 }
@@ -109,18 +110,6 @@ namespace Building
             {
                 this.MetaModelService.UpdateClass(axClass, this.ModelSaveInfo);
             }
-        }
-
-        protected string tag(ITagExtractor extractor)
-        {
-            string ret = string.Empty;
-
-            if (extractor.validate())
-            {
-                ret = extractor.getTagValue();
-            }
-
-            return ret;
         }
     }
 }

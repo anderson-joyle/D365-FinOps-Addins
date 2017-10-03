@@ -70,11 +70,11 @@ namespace Addin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://gist.githubusercontent.com/anderson-joyle/314a003a09e4a3836ec953f109b194e3/raw/230e64449e575aa5a8c667f799dbb8441165c761/gistfile1.txt.
+        ///   Looks up a localized string similar to https://gist.githubusercontent.com/anderson-joyle/e49e0a4f23a30efc6c5a1a62d00d1860/raw/293ad9d2da009243f4bd710c2927390c469f64c2/gistfile1.txt.
         /// </summary>
-        internal static string JsonURL {
+        internal static string XmlURL {
             get {
-                return ResourceManager.GetString("JsonURL", resourceCulture);
+                return ResourceManager.GetString("XmlURL", resourceCulture);
             }
         }
     }
