@@ -1,21 +1,27 @@
 ﻿namespace Addin
 {
     using System;
-    using System.ComponentModel;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Web;
     using System.ComponentModel.Composition;
+    using System.Drawing;
     using Microsoft.Dynamics.Framework.Tools.Extensibility;
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
+    using Networking;
     using Joking;
 
+
     /// <summary>
-    /// Display a Chuck Norris random joke.
+    /// Under presure? Take this dad joke and motivational quote to keep on going.
     /// </summary>
     [Export(typeof(IMainMenu))]
     public class MainMenuAddIn : MainMenuBase
     {
         #region Member variables
-        private const string addinName = "Addin";
+        private const string addinName = "OperationsAddin2";
         #endregion
 
         #region Properties
@@ -52,9 +58,24 @@
         {
             try
             {
-                JokeEngine engine = new JokeEngine();
+                DadJoke joke = DadJoke.construct(Request.dadJoke());
+                MotivationalQuote quote = MotivationalQuote.construct(Request.motivationalQuote());
 
-                CoreUtility.DisplayInfo(engine.makeMeLaugh());
+                string message = string.Empty;
+
+                if (joke.Id != null)
+                {
+                    //message += string.Format("Dad joke:\n{0}", joke.Joke);
+                    message += joke.Joke;
+                }
+
+                //if (quote.Id != 0)
+                //{
+                //    message += "\n\n";
+                //    message += string.Format("Motivational quote:\n{0}{1}", HttpUtility.HtmlDecode(quote.Content), quote.Title.ToUpper());
+                //}
+
+                CoreUtility.DisplayInfo(message);
             }
             catch (Exception ex)
             {

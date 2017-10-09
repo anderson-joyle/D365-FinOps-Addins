@@ -61,20 +61,29 @@ namespace Addin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://api.icndb.com/jokes/random.
+        ///   Looks up a localized string similar to https://icanhazdadjoke.com/.
         /// </summary>
-        internal static string JokingAPIUrl {
+        internal static string DadJokeUrl {
             get {
-                return ResourceManager.GetString("JokingAPIUrl", resourceCulture);
+                return ResourceManager.GetString("DadJokeUrl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make me laugh!.
+        ///   Looks up a localized string similar to Relax dude!.
         /// </summary>
         internal static string MainMenuAddInCaption {
             get {
                 return ResourceManager.GetString("MainMenuAddInCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&amp;filter[posts_per_page]=1.
+        /// </summary>
+        internal static string MotivationalQuote {
+            get {
+                return ResourceManager.GetString("MotivationalQuote", resourceCulture);
             }
         }
     }

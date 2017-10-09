@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="JokingAPIUrl" xml:space="preserve">
-    <value>http://api.icndb.com/jokes/random</value>
+  <data name="DadJokeUrl" xml:space="preserve">
+    <value>https://icanhazdadjoke.com/</value>
   </data>
   <data name="MainMenuAddInCaption" xml:space="preserve">
-    <value>Make me laugh!</value>
+    <value>Relax dude!</value>
+  </data>
+  <data name="MotivationalQuote" xml:space="preserve">
+    <value>https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&amp;filter[posts_per_page]=1</value>
   </data>
 </root>
