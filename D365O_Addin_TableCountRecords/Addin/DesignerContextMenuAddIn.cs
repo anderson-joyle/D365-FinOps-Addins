@@ -11,25 +11,30 @@
     using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
     using Microsoft.Dynamics.Framework.Tools.Configuration;
 
-
-    // Convenience prefix
-    using TablesAutomation = Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
+    using Tables = Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
+    using DataEntities = Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.DataEntityViews;
 
     using Metadata = Microsoft.Dynamics.AX.Metadata;
     using System.Data.SqlClient;
+    using System.IO;
+    using System.Diagnostics;
 
     /// <summary>
     /// Counts the number of records of the selected table
     /// </summary>
     [Export(typeof(IDesignerMenu))]
-    [DesignerMenuExportMetadata(AutomationNodeType = typeof(TablesAutomation.ITable))]
-    [DesignerMenuExportMetadata(AutomationNodeType = typeof(TablesAutomation.ITableExtension))]
-    [DesignerMenuExportMetadata(AutomationNodeType = typeof(TablesAutomation.IRelation))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(Tables.ITable))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(Tables.ITableExtension))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(Tables.IRelation))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(DataEntities.IDataEntityView))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(DataEntities.IDataEntityViewExtension))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(DataEntities.IRelation))]
     public class DesignerContextMenuAddIn : DesignerMenuBase
     {
         #region Member variables
         private const string addinName = "DesignerAddin";
         private string tableName;
+        private string dataEntityName;
         #endregion
 
         #region Properties
@@ -107,23 +112,27 @@
                 StringBuilder result;
                 INamedElement namedElement = e.SelectedElement as INamedElement;
 
-                if (namedElement is TablesAutomation.ITable)
+                if (namedElement is Tables.ITable)
                 {
-                    result = this.GenerateFromTable(namedElement as TablesAutomation.ITable, true);
+                    result = this.GenerateFromTable(namedElement as Tables.ITable, true);
                 }
-                else if (namedElement is TablesAutomation.ITableExtension)
+                else if (namedElement is Tables.ITableExtension)
                 {
-                    result = this.GenerateFromTableExtension(namedElement as TablesAutomation.ITableExtension, true);
+                    result = this.GenerateFromTableExtension(namedElement as Tables.ITableExtension, true);
                 }
-                else if (namedElement is TablesAutomation.IRelation)
+                else if (namedElement is Tables.IRelation)
                 {
-                    result = this.GenerateFromTableRelations(e.SelectedElements.OfType<TablesAutomation.IRelation>());
+                    result = this.GenerateFromTableRelations(e.SelectedElements.OfType<Tables.IRelation>());
 
-                    var selectedRelations = e.SelectedElements.OfType<TablesAutomation.IRelation>();
+                    var selectedRelations = e.SelectedElements.OfType<Tables.IRelation>();
                     if (selectedRelations.Any())
                     {
                         result = this.GenerateFromTableRelations(selectedRelations);
                     }
+                }
+                else if (namedElement is DataEntities.IDataEntityView)
+                {
+                    result = this.GenerateFromDataEntity(namedElement as DataEntities.IDataEntityView, true);
                 }
                 else
                 {
@@ -182,8 +191,30 @@
                     message += "==================  USED QUERY  ===================\n";
                     message += result.ToString();
                     message += "===============================================";
+                    message += "\n\n";
+                    message += "Do you want to open this query in MSSQL Management Studio?";
 
-                    CoreUtility.DisplayInfo(message);
+                    if (CoreUtility.PromptYesNo(message, "Counting records"))
+                    {
+                        // Save the SQL file and open it in SQL management studio. 
+                        string temporaryFileName = Path.GetTempFileName();
+
+                        // Rename and move
+                        var sqlFileName = temporaryFileName.Replace(".tmp", ".sql");
+                        File.Move(temporaryFileName, sqlFileName);
+
+                        // Store the script in the file
+                        File.AppendAllText(sqlFileName, result.ToString());
+
+                        //var dte = CoreUtility.ServiceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+                        //dte.ExecuteCommand("File.OpenFile", sqlFileName);
+
+                        Process sqlManagementStudio = new Process();
+                        sqlManagementStudio.StartInfo.FileName = sqlFileName;
+                        sqlManagementStudio.StartInfo.UseShellExecute = true;
+                        sqlManagementStudio.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                        sqlManagementStudio.Start();
+                    }
                 }
             }
             catch (Exception ex)
@@ -200,7 +231,7 @@
         /// </summary>
         /// <param name="selectedTable">The designer metadata designating the view.</param>
         /// <returns>The string containing the SQL command.</returns>
-        private StringBuilder GenerateFromTable(TablesAutomation.ITable selectedTable, bool addGroupBy)
+        private StringBuilder GenerateFromTable(Tables.ITable selectedTable, bool addGroupBy)
         {
             var result = new StringBuilder();
 
@@ -248,12 +279,36 @@
         }
 
         /// <summary>
+        /// The method is called when the user has selected to view a single view.
+        /// The method generates a select on all fields, with no joins.
+        /// </summary>
+        /// <param name="selectedTable">The designer metadata designating the view.</param>
+        /// <returns>The string containing the SQL command.</returns>
+        private StringBuilder GenerateFromDataEntity(DataEntities.IDataEntityView selectedDataEntity, bool addGroupBy)
+        {
+            var result = new StringBuilder();
+            bool first = true;
+
+            Metadata.MetaModel.AxDataEntityView axDataEntity = this.MetadataProvider.DataEntityViews.Read(selectedDataEntity.Name);
+
+            result.AppendLine(string.Format(CultureInfo.InvariantCulture, "USE {0}", BusinessDatabaseName));
+            result.AppendLine("GO");
+
+            dataEntityName = SqlNameMangling.GetSqlTableName(selectedDataEntity.Name);
+
+            result.AppendLine("SELECT COUNT(*) AS COUNTER");
+            result.AppendLine("FROM " + dataEntityName);
+
+            return result;
+        }
+
+        /// <summary>
         /// The method is called when the user has selected to view a table extension instance.
         /// The method generates a select on all fields, with no joins.
         /// </summary>
         /// <param name="selectedExtensionTable">The designer metadata designating the view.</param>
         /// <returns>The string containing the SQL command.</returns>
-        private StringBuilder GenerateFromTableExtension(TablesAutomation.ITableExtension selectedExtensionTable, bool addGroupBy)
+        private StringBuilder GenerateFromTableExtension(Tables.ITableExtension selectedExtensionTable, bool addGroupBy)
         {
             var result = new StringBuilder();
             bool first = true;
@@ -299,9 +354,9 @@
         /// </summary>
         /// <param name="selectedRelations">The list of field groups to select fields from.</param>
         /// <returns>The string containing the SQL command.</returns>
-        private StringBuilder GenerateFromTableRelations(IEnumerable<TablesAutomation.IRelation> selectedRelations)
+        private StringBuilder GenerateFromTableRelations(IEnumerable<Tables.IRelation> selectedRelations)
         {
-            TablesAutomation.ITable table = selectedRelations.First().Table;
+            Tables.ITable table = selectedRelations.First().Table;
             Stack<Metadata.MetaModel.AxTable> tables = this.SuperTables(table.Name);
 
             var result = this.GenerateFromTable(table, false);
@@ -318,29 +373,29 @@
                 result.Append("ON ");
 
                 bool first = true;
-                foreach (TablesAutomation.IRelationConstraint constraint in relation.RelationConstraints)
+                foreach (Tables.IRelationConstraint constraint in relation.RelationConstraints)
                 {
                     if (!first)
                         result.Append(" AND ");
 
-                    if (constraint is TablesAutomation.IRelationConstraintField)
+                    if (constraint is Tables.IRelationConstraintField)
                     {   // Table.field = RelatedTable.relatedField
-                        var fieldConstraint = constraint as TablesAutomation.IRelationConstraintField;
+                        var fieldConstraint = constraint as Tables.IRelationConstraintField;
                         result.Append(SqlNameMangling.GetSqlTableName(table.Name) + ".[" + SqlNameMangling.GetValidSqlNameForField(fieldConstraint.Field) + "]");
                         result.Append(" = ");
                         result.AppendLine(string.Format(CultureInfo.InvariantCulture, "t{0}", disambiguation) + "." + SqlNameMangling.GetValidSqlNameForField(fieldConstraint.RelatedField));
                     }
-                    else if (constraint is TablesAutomation.IRelationConstraintFixed)
+                    else if (constraint is Tables.IRelationConstraintFixed)
                     {   // Table.field = value
-                        var fixedConstraint = constraint as TablesAutomation.IRelationConstraintFixed;
+                        var fixedConstraint = constraint as Tables.IRelationConstraintFixed;
 
                         result.Append(SqlNameMangling.GetSqlTableName(table.Name) + ".[" + SqlNameMangling.GetValidSqlNameForField(fixedConstraint.Field) + "]");
                         result.Append(" = ");
                         result.AppendLine(fixedConstraint.Value.ToString(CultureInfo.InvariantCulture));
                     }
-                    else if (constraint is TablesAutomation.IRelationConstraintRelatedFixed)
+                    else if (constraint is Tables.IRelationConstraintRelatedFixed)
                     {   // Value = RelatedTable.field
-                        var relatedFixedConstraint = constraint as TablesAutomation.IRelationConstraintRelatedFixed;
+                        var relatedFixedConstraint = constraint as Tables.IRelationConstraintRelatedFixed;
                         result.Append(relatedFixedConstraint.Value);
                         result.Append(" = ");
                         result.AppendLine(string.Format(CultureInfo.InvariantCulture, "t{0}", disambiguation) + ".[" + SqlNameMangling.GetValidSqlNameForField(relatedFixedConstraint.RelatedField) + "]");
