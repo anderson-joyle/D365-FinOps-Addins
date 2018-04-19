@@ -10,13 +10,15 @@ using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
 using Microsoft.Dynamics.Framework.Tools.ProjectSystem;
 
 using Metadata = Microsoft.Dynamics.AX.Metadata;
+using Microsoft.Dynamics.AX.Metadata.MetaModel;
+using Microsoft.Dynamics.Framework.Tools.Extensibility;
 
 namespace Building
 { 
     public class NewFieldEngine
     {
         #region Member variables
-        protected Addin.FormController controller;
+        protected Addin.Controlling controller;
         protected NamedElement namedElement;
         protected bool edtExist;
         #endregion
@@ -79,7 +81,7 @@ namespace Building
         }
         #endregion
 
-        public NewFieldEngine(Addin.FormController controller, NamedElement namedElement)
+        public NewFieldEngine(Addin.Controlling controller, NamedElement namedElement)
         {
             this.controller = controller;
             this.namedElement = namedElement;
@@ -87,28 +89,30 @@ namespace Building
 
         public void run()
         {
-            Metadata.MetaModel.AxTableField axTableField;
-            Metadata.MetaModel.AxEdt axEdt;
+            AxTableField axTableField;
+            AxEdt axEdt;
 
             axTableField = this.buildField();
             axEdt = this.buildEdt();
 
-            if (!edtExist)
+            if (!edtExist && axEdt != null)
             {
                 this.addGeneralPropertiesToEdt(axEdt);
                 this.addSpecificPropertiesToEdt(axEdt);
 
                 this.MetaModelService.CreateExtendedDataType(axEdt, this.ModelSaveInfo);
+                this.appendToProject(axEdt);
             }
 
-            this.addGeneralPropertiesToField(axTableField);
+            this.addGeneralPropertiesToField(axTableField, axEdt);
             this.addSpecificPropertiesToField(axTableField);
             this.addField(axTableField);
+            
         }
 
-        public Metadata.MetaModel.AxTableField buildField()
+        public AxTableField buildField()
         {
-            Metadata.MetaModel.AxTableField axTableField;
+            AxTableField axTableField;
             FieldType fieldType;
 
             Enum.TryParse<FieldType>(this.controller.comboBoxFieldType.SelectedValue.ToString(), out fieldType);
@@ -158,9 +162,19 @@ namespace Building
         public Metadata.MetaModel.AxEdt buildEdt()
         {
             Metadata.MetaModel.AxEdt edt;
+            string edtName;
             FieldType fieldType;
 
-            edt = this.MetadataProvider.Edts.Read(this.controller.textBoxEDTName.Text);
+            if (this.controller.comboBoxEDTName.SelectedIndex > 0)
+            {
+                edtName = this.controller.comboBoxEDTName.SelectedIndex.ToString();
+            }
+            else
+            {
+                edtName = this.controller.comboBoxEDTName.Text;
+            }
+
+            edt = this.MetadataProvider.Edts.Read(edtName);
 
             if (edt != null)
             {
@@ -208,6 +222,8 @@ namespace Building
                     default:
                         throw new NotImplementedException($"Field type {this.controller.comboBoxFieldType.ToString()} is not supported");
                 }
+
+                edt.Name = edtName;
             }
 
             return edt;
@@ -217,7 +233,7 @@ namespace Building
         {
             if (this.namedElement is Table)
             {
-                Metadata.MetaModel.AxTable axTable = this.MetadataProvider.Tables.Read(this.namedElement.Name);
+                AxTable axTable = this.MetadataProvider.Tables.Read(this.namedElement.Name);
                 axTable.Fields.Add(field);
 
                 this.MetaModelService.UpdateTable(axTable, this.ModelSaveInfo);
@@ -226,23 +242,32 @@ namespace Building
             {
                 var extensionName = this.namedElement.Name.Split('.');
 
-                Metadata.MetaModel.AxTableExtension axTableExtension = this.MetadataProvider.TableExtensions.Read(this.namedElement.Name);
+                AxTableExtension axTableExtension = this.MetadataProvider.TableExtensions.Read(this.namedElement.Name);
+                AxTable axTable = this.MetadataProvider.Tables.Read(extensionName[0]);
 
                 axTableExtension.Fields.Add(field);
+
+                this.MetaModelService.UpdateTable(axTable, this.ModelSaveInfo);
             }
         }
 
-        protected void addGeneralPropertiesToEdt(Metadata.MetaModel.AxEdt edt)
+        protected void addGeneralPropertiesToEdt(AxEdt edt)
         {
             if (!edtExist)
             {
-                edt.Name = this.controller.textBoxEDTName.Text;
-                edt.Label = this.controller.textBoxLabel.Text;
-                edt.HelpText = this.controller.textBoxHelpText.Text;
+                if (this.controller.comboBoxExtends.SelectedIndex > 0)
+                {
+                    AxEdt edtLocal = this.MetadataProvider.Edts.Read(this.controller.comboBoxExtends.SelectedItem.ToString());
+
+                    if (edtLocal != null)
+                    {
+                        edt.Extends = edtLocal.Name;
+                    }
+                }
             }
         }
 
-        protected void addSpecificPropertiesToEdt(Metadata.MetaModel.AxEdt edt)
+        protected void addSpecificPropertiesToEdt(AxEdt edt)
         {
             FieldType fieldType;
 
@@ -254,7 +279,6 @@ namespace Building
                 {
                     case FieldType.String:
                         Metadata.MetaModel.AxEdtString edtString = edt as Metadata.MetaModel.AxEdtString;
-                        edtString.StringSize = (int)this.controller.numericUpDownStringSize.Value;
                         break;
                     case FieldType.Enum:
                         Metadata.MetaModel.AxEdtEnum edtEnum = edt as Metadata.MetaModel.AxEdtEnum;
@@ -269,21 +293,30 @@ namespace Building
             }
         }
 
-        protected void addGeneralPropertiesToField(Metadata.MetaModel.AxTableField axTableField)
+        protected void addGeneralPropertiesToField(AxTableField axTableField, AxEdt edt)
         {
             axTableField.Name = this.controller.textBoxFieldName.Text;
-            axTableField.ExtendedDataType = this.controller.textBoxEDTName.Text;
 
-            if (edtExist)
+            if (edt != null)
             {
-                axTableField.Label = this.controller.textBoxLabel.Text;
-                axTableField.HelpText = this.controller.textBoxHelpText.Text;
+                axTableField.ExtendedDataType = edt.Name;
             }
         }
 
         protected void addSpecificPropertiesToField(Metadata.MetaModel.AxTableField axTableField)
         {
             return;
+        }
+
+        /// <summary>
+        /// Append createds privilege to active project
+        /// </summary>
+        /// <param name="privilege">Recently created privilege</param>
+        /// <remarks>This method could be improved. Most probably are better ways to achieve this goal.</remarks>
+        protected void appendToProject(AxEdt edt)
+        {
+            var projectService = ServiceLocator.GetService(typeof(IDynamicsProjectService)) as IDynamicsProjectService;
+            projectService.AddElementToActiveProject(edt);
         }
     }
 }

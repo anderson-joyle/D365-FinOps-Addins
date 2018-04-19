@@ -56,7 +56,7 @@
             try
             {
                 NamedElement element = e.SelectedElement as NamedElement;
-                FormController controller = new FormController();
+                Controlling controller = new Controlling();
 
                 if (controller.prompt())
                 {
