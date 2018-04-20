@@ -55,12 +55,10 @@ namespace Addin
             this.controlling.form = this;
 
             this.controlling.comboBoxEDTName = comboBoxEDTName;
-            this.controlling.comboBoxEnumType = comboBoxEnumType;
             this.controlling.comboBoxExtends = comboBoxExtends;
             this.controlling.textBoxFieldName = textBoxFieldName;
             this.controlling.comboBoxFieldType = comboBoxFieldType;
             this.controlling.progressBarExtends = progressBarExtends;
-            this.controlling.progressBarEnum = progressBarEnum;
             this.controlling.toolStripStatusLabelVerbose = toolStripStatusLabelVerbose;
 
             this.controlling.init();

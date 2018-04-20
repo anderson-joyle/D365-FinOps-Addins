@@ -12,9 +12,7 @@ namespace Addin
     public class Loading
     {
         public ProgressBar progressBarExtends;
-        public ProgressBar progressBarEnum;
 
-        public ComboBox comboBoxEnumType;
         public ComboBox comboBoxExtends;
         public ComboBox comboBoxEDTName;
 
@@ -55,32 +53,6 @@ namespace Addin
             }
         }
         #endregion
-
-        public void loadComboboxEnumType(string selected)
-        {
-            this.comboBoxEnumType.Items.Clear();
-        }
-
-        public void loadComboboxEnum()
-        {
-            if (this.comboBoxEnumType.Items.Count > 0)
-            {
-                return;
-            }
-
-            var enumList = this.MetaModelService.GetEnumNames(Microsoft.Dynamics.AX.Metadata.Providers.ListFilterType.Both);
-
-            this.restartProgressBarExtends(enumList.Count);
-
-            // Add empty item as index 0
-            this.comboBoxEnumType.Items.Add("");
-
-            foreach (string enumName in enumList)
-            {
-                this.comboBoxEnumType.Items.Add(enumName);
-                this.progressBarEnum.PerformStep();
-            }
-        }
 
         public void loadComboboxEDTs(string selected)
         {
@@ -153,13 +125,6 @@ namespace Addin
             this.progressBarExtends.Value = 0;
             this.progressBarExtends.Step = 1;
             this.progressBarExtends.Maximum = max;
-        }
-
-        private void restartProgressBarEnum(int max)
-        {
-            this.progressBarEnum.Value = 0;
-            this.progressBarEnum.Step = 1;
-            this.progressBarEnum.Maximum = max;
         }
     }
 }

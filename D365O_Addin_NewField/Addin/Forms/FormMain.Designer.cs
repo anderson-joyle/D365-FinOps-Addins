@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelVerboseTitle = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelVerbose = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonCreate = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -39,10 +41,9 @@
             this.comboBoxFieldType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
+            this.comboBoxEDTName = new System.Windows.Forms.ComboBox();
             this.progressBarExtends = new System.Windows.Forms.ProgressBar();
-            this.progressBarEnum = new System.Windows.Forms.ProgressBar();
             this.comboBoxExtends = new System.Windows.Forms.ComboBox();
-            this.comboBoxEnumType = new System.Windows.Forms.ComboBox();
             this.labelExtends = new System.Windows.Forms.Label();
             this.labelEDTName = new System.Windows.Forms.Label();
             this.labelFieldName = new System.Windows.Forms.Label();
@@ -53,9 +54,6 @@
             this.toolTipStringSize = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipEdtName = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipExtends = new System.Windows.Forms.ToolTip(this.components);
-            this.comboBoxEDTName = new System.Windows.Forms.ComboBox();
-            this.toolStripStatusLabelVerboseTitle = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelVerbose = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -67,11 +65,22 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelVerboseTitle,
             this.toolStripStatusLabelVerbose});
-            this.statusStrip.Location = new System.Drawing.Point(0, 208);
+            this.statusStrip.Location = new System.Drawing.Point(0, 199);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 21, 0);
             this.statusStrip.Size = new System.Drawing.Size(510, 22);
             this.statusStrip.TabIndex = 1;
+            // 
+            // toolStripStatusLabelVerboseTitle
+            // 
+            this.toolStripStatusLabelVerboseTitle.Name = "toolStripStatusLabelVerboseTitle";
+            this.toolStripStatusLabelVerboseTitle.Size = new System.Drawing.Size(55, 17);
+            this.toolStripStatusLabelVerboseTitle.Text = "Verbose: ";
+            // 
+            // toolStripStatusLabelVerbose
+            // 
+            this.toolStripStatusLabelVerbose.Name = "toolStripStatusLabelVerbose";
+            this.toolStripStatusLabelVerbose.Size = new System.Drawing.Size(0, 17);
             // 
             // toolStrip
             // 
@@ -126,10 +135,11 @@
             // 
             // comboBoxFieldType
             // 
+            this.comboBoxFieldType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFieldType.FormattingEnabled = true;
             this.comboBoxFieldType.Location = new System.Drawing.Point(95, 6);
             this.comboBoxFieldType.Name = "comboBoxFieldType";
-            this.comboBoxFieldType.Size = new System.Drawing.Size(138, 26);
+            this.comboBoxFieldType.Size = new System.Drawing.Size(215, 26);
             this.comboBoxFieldType.TabIndex = 1;
             this.toolTipFieldType.SetToolTip(this.comboBoxFieldType, "All D365 primitive field types.");
             // 
@@ -140,16 +150,14 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(510, 183);
+            this.tabControl1.Size = new System.Drawing.Size(510, 174);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPageGeneral
             // 
             this.tabPageGeneral.Controls.Add(this.comboBoxEDTName);
             this.tabPageGeneral.Controls.Add(this.progressBarExtends);
-            this.tabPageGeneral.Controls.Add(this.progressBarEnum);
             this.tabPageGeneral.Controls.Add(this.comboBoxExtends);
-            this.tabPageGeneral.Controls.Add(this.comboBoxEnumType);
             this.tabPageGeneral.Controls.Add(this.labelExtends);
             this.tabPageGeneral.Controls.Add(this.labelEDTName);
             this.tabPageGeneral.Controls.Add(this.labelFieldName);
@@ -159,54 +167,43 @@
             this.tabPageGeneral.Location = new System.Drawing.Point(4, 27);
             this.tabPageGeneral.Name = "tabPageGeneral";
             this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGeneral.Size = new System.Drawing.Size(502, 152);
+            this.tabPageGeneral.Size = new System.Drawing.Size(502, 143);
             this.tabPageGeneral.TabIndex = 0;
             this.tabPageGeneral.Text = "General";
             this.tabPageGeneral.UseVisualStyleBackColor = true;
             // 
+            // comboBoxEDTName
+            // 
+            this.comboBoxEDTName.FormattingEnabled = true;
+            this.comboBoxEDTName.Location = new System.Drawing.Point(95, 68);
+            this.comboBoxEDTName.Name = "comboBoxEDTName";
+            this.comboBoxEDTName.Size = new System.Drawing.Size(398, 26);
+            this.comboBoxEDTName.TabIndex = 4;
+            // 
             // progressBarExtends
             // 
-            this.progressBarExtends.Location = new System.Drawing.Point(95, 137);
+            this.progressBarExtends.Location = new System.Drawing.Point(95, 126);
             this.progressBarExtends.Name = "progressBarExtends";
             this.progressBarExtends.Size = new System.Drawing.Size(398, 10);
             this.progressBarExtends.Step = 1;
             this.progressBarExtends.TabIndex = 52;
             // 
-            // progressBarEnum
-            // 
-            this.progressBarEnum.Location = new System.Drawing.Point(239, 33);
-            this.progressBarEnum.Name = "progressBarEnum";
-            this.progressBarEnum.Size = new System.Drawing.Size(254, 10);
-            this.progressBarEnum.Step = 1;
-            this.progressBarEnum.TabIndex = 51;
-            // 
             // comboBoxExtends
             // 
             this.comboBoxExtends.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxExtends.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExtends.FormattingEnabled = true;
-            this.comboBoxExtends.Location = new System.Drawing.Point(95, 109);
+            this.comboBoxExtends.Location = new System.Drawing.Point(95, 98);
             this.comboBoxExtends.Name = "comboBoxExtends";
             this.comboBoxExtends.Size = new System.Drawing.Size(398, 26);
             this.comboBoxExtends.Sorted = true;
             this.comboBoxExtends.TabIndex = 5;
             this.toolTipExtends.SetToolTip(this.comboBoxExtends, "If a new extended data type is given, it\'s possible to set a edt to extend.");
             // 
-            // comboBoxEnumType
-            // 
-            this.comboBoxEnumType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.comboBoxEnumType.Enabled = false;
-            this.comboBoxEnumType.FormattingEnabled = true;
-            this.comboBoxEnumType.Location = new System.Drawing.Point(239, 6);
-            this.comboBoxEnumType.Name = "comboBoxEnumType";
-            this.comboBoxEnumType.Size = new System.Drawing.Size(254, 26);
-            this.comboBoxEnumType.Sorted = true;
-            this.comboBoxEnumType.TabIndex = 2;
-            this.toolTipEnum.SetToolTip(this.comboBoxEnumType, "List of all enums available. This is enabled when \"Field type\" is ENUM.");
-            // 
             // labelExtends
             // 
             this.labelExtends.AutoSize = true;
-            this.labelExtends.Location = new System.Drawing.Point(26, 112);
+            this.labelExtends.Location = new System.Drawing.Point(26, 101);
             this.labelExtends.Name = "labelExtends";
             this.labelExtends.Size = new System.Drawing.Size(65, 18);
             this.labelExtends.TabIndex = 47;
@@ -215,7 +212,7 @@
             // labelEDTName
             // 
             this.labelEDTName.AutoSize = true;
-            this.labelEDTName.Location = new System.Drawing.Point(8, 82);
+            this.labelEDTName.Location = new System.Drawing.Point(8, 71);
             this.labelEDTName.Name = "labelEDTName";
             this.labelEDTName.Size = new System.Drawing.Size(83, 18);
             this.labelEDTName.TabIndex = 46;
@@ -224,7 +221,7 @@
             // labelFieldName
             // 
             this.labelFieldName.AutoSize = true;
-            this.labelFieldName.Location = new System.Drawing.Point(7, 51);
+            this.labelFieldName.Location = new System.Drawing.Point(7, 40);
             this.labelFieldName.Name = "labelFieldName";
             this.labelFieldName.Size = new System.Drawing.Size(84, 18);
             this.labelFieldName.TabIndex = 45;
@@ -241,7 +238,7 @@
             // 
             // textBoxFieldName
             // 
-            this.textBoxFieldName.Location = new System.Drawing.Point(95, 49);
+            this.textBoxFieldName.Location = new System.Drawing.Point(95, 38);
             this.textBoxFieldName.Name = "textBoxFieldName";
             this.textBoxFieldName.Size = new System.Drawing.Size(398, 24);
             this.textBoxFieldName.TabIndex = 3;
@@ -272,30 +269,11 @@
             this.toolTipExtends.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTipExtends.ToolTipTitle = "Extends";
             // 
-            // comboBoxEDTName
-            // 
-            this.comboBoxEDTName.FormattingEnabled = true;
-            this.comboBoxEDTName.Location = new System.Drawing.Point(95, 79);
-            this.comboBoxEDTName.Name = "comboBoxEDTName";
-            this.comboBoxEDTName.Size = new System.Drawing.Size(398, 26);
-            this.comboBoxEDTName.TabIndex = 4;
-            // 
-            // toolStripStatusLabelVerboseTitle
-            // 
-            this.toolStripStatusLabelVerboseTitle.Name = "toolStripStatusLabelVerboseTitle";
-            this.toolStripStatusLabelVerboseTitle.Size = new System.Drawing.Size(55, 17);
-            this.toolStripStatusLabelVerboseTitle.Text = "Verbose: ";
-            // 
-            // toolStripStatusLabelVerbose
-            // 
-            this.toolStripStatusLabelVerbose.Name = "toolStripStatusLabelVerbose";
-            this.toolStripStatusLabelVerbose.Size = new System.Drawing.Size(0, 17);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 230);
+            this.ClientSize = new System.Drawing.Size(510, 221);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
@@ -329,7 +307,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPageGeneral;
         private System.Windows.Forms.ComboBox comboBoxExtends;
-        private System.Windows.Forms.ComboBox comboBoxEnumType;
         private System.Windows.Forms.Label labelExtends;
         private System.Windows.Forms.Label labelEDTName;
         private System.Windows.Forms.Label labelFieldName;
@@ -337,7 +314,6 @@
         private System.Windows.Forms.ComboBox comboBoxFieldType;
         private System.Windows.Forms.TextBox textBoxFieldName;
         private System.Windows.Forms.ProgressBar progressBarExtends;
-        private System.Windows.Forms.ProgressBar progressBarEnum;
         private System.Windows.Forms.ToolTip toolTipEnum;
         private System.Windows.Forms.ToolTip toolTipFieldName;
         private System.Windows.Forms.ToolTip toolTipStringSize;

@@ -91,7 +91,7 @@ namespace Addin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New field.
+        ///   Looks up a localized string similar to Add field + edt.
         /// </summary>
         internal static string DesignerAddinCaption {
             get {

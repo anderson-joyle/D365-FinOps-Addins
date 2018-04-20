@@ -21,6 +21,13 @@ namespace Building
         protected Addin.Controlling controller;
         protected NamedElement namedElement;
         protected bool edtExist;
+
+        protected FieldType fieldType;
+        protected string fieldName;
+        protected int edtIndex;
+        protected string edtText;
+        protected int extendsIndex;
+        protected string extendsText;
         #endregion
 
         #region Properties
@@ -85,6 +92,14 @@ namespace Building
         {
             this.controller = controller;
             this.namedElement = namedElement;
+
+            Enum.TryParse<FieldType>(this.controller.comboBoxFieldType.SelectedValue.ToString(), out fieldType);
+
+            this.fieldName = this.controller.textBoxFieldName.Text;
+            this.edtIndex = this.controller.comboBoxEDTName.SelectedIndex;
+            this.edtText = this.controller.comboBoxEDTName.Text;
+            this.extendsIndex = this.controller.comboBoxExtends.SelectedIndex;
+            this.extendsText = this.controller.comboBoxExtends.Text;
         }
 
         public void run()
@@ -113,11 +128,8 @@ namespace Building
         public AxTableField buildField()
         {
             AxTableField axTableField;
-            FieldType fieldType;
 
-            Enum.TryParse<FieldType>(this.controller.comboBoxFieldType.SelectedValue.ToString(), out fieldType);
-
-            switch (fieldType)
+            switch (this.fieldType)
             {
                 case FieldType.String:
                     axTableField = new Metadata.MetaModel.AxTableFieldString();
@@ -162,19 +174,8 @@ namespace Building
         public Metadata.MetaModel.AxEdt buildEdt()
         {
             Metadata.MetaModel.AxEdt edt;
-            string edtName;
-            FieldType fieldType;
 
-            if (this.controller.comboBoxEDTName.SelectedIndex > 0)
-            {
-                edtName = this.controller.comboBoxEDTName.SelectedIndex.ToString();
-            }
-            else
-            {
-                edtName = this.controller.comboBoxEDTName.Text;
-            }
-
-            edt = this.MetadataProvider.Edts.Read(edtName);
+            edt = this.MetadataProvider.Edts.Read(this.edtText);
 
             if (edt != null)
             {
@@ -182,9 +183,7 @@ namespace Building
             }
             else
             {
-                Enum.TryParse<FieldType>(this.controller.comboBoxFieldType.SelectedValue.ToString(), out fieldType);
-
-                switch (fieldType)
+                switch (this.fieldType)
                 {
                     case FieldType.String:
                         edt = new Metadata.MetaModel.AxEdtString();
@@ -223,7 +222,7 @@ namespace Building
                         throw new NotImplementedException($"Field type {this.controller.comboBoxFieldType.ToString()} is not supported");
                 }
 
-                edt.Name = edtName;
+                edt.Name = this.edtText;
             }
 
             return edt;
@@ -236,18 +235,17 @@ namespace Building
                 AxTable axTable = this.MetadataProvider.Tables.Read(this.namedElement.Name);
                 axTable.Fields.Add(field);
 
-                this.MetaModelService.UpdateTable(axTable, this.ModelSaveInfo);
+                this.MetadataProvider.Tables.Update(axTable, this.ModelSaveInfo);
             }
             else
             {
                 var extensionName = this.namedElement.Name.Split('.');
 
                 AxTableExtension axTableExtension = this.MetadataProvider.TableExtensions.Read(this.namedElement.Name);
-                AxTable axTable = this.MetadataProvider.Tables.Read(extensionName[0]);
-
+                
                 axTableExtension.Fields.Add(field);
 
-                this.MetaModelService.UpdateTable(axTable, this.ModelSaveInfo);
+                this.MetadataProvider.TableExtensions.Update(axTableExtension, this.ModelSaveInfo);
             }
         }
 
@@ -255,9 +253,9 @@ namespace Building
         {
             if (!edtExist)
             {
-                if (this.controller.comboBoxExtends.SelectedIndex > 0)
+                if (this.extendsIndex > 0 && this.extendsText != string.Empty)
                 {
-                    AxEdt edtLocal = this.MetadataProvider.Edts.Read(this.controller.comboBoxExtends.SelectedItem.ToString());
+                    AxEdt edtLocal = this.MetadataProvider.Edts.Read(this.extendsText);
 
                     if (edtLocal != null)
                     {

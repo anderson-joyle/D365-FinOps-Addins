@@ -21,9 +21,7 @@ namespace Addin
         public TextBox textBoxFieldName { set; get; }
         public ComboBox comboBoxEDTName { set; get; }
         public ComboBox comboBoxExtends { set; get; }
-        public ComboBox comboBoxEnumType { set; get; }
         public ProgressBar progressBarExtends { set; get; }
-        public ProgressBar progressBarEnum { set; get; }
         public ToolTip toolTipEdtName { set; get; }
         public GroupBox groupBoxStringComplements { set; get; }
         public GroupBox groupBoxEnumComplements { set; get; }
@@ -76,9 +74,7 @@ namespace Addin
         public void init()
         {
             this.comboBoxFieldType.SelectedIndexChanged += this.fieldTypeChanged;
-            this.comboBoxFieldType.SelectedIndexChanged += this.loadEnumTypes;
             this.comboBoxFieldType.SelectedIndexChanged += this.loadEDTNames;
-            this.comboBoxEnumType.SelectedIndexChanged += this.enumTypeChanged;
             this.comboBoxExtends.Leave += this.extendsLeave;
             this.comboBoxEDTName.Leave += this.edtLeave;
 
@@ -89,14 +85,10 @@ namespace Addin
             //this.comboBoxEnumType.SelectedIndexChanged += this.verbose;
             //this.comboBoxExtends.Leave += this.verbose;
             //this.comboBoxEDTName.Leave += this.verbose;
-
-            this.loading.comboBoxEnumType = comboBoxEnumType;
+            
             this.loading.comboBoxExtends = comboBoxExtends;
             this.loading.comboBoxEDTName = comboBoxEDTName;
-            this.loading.progressBarEnum = progressBarEnum;
             this.loading.progressBarExtends = progressBarExtends;
-
-            this.comboBoxEnumType.Enabled = false;
             this.comboBoxFieldType.DataSource = Enum.GetValues(typeof(FieldType));
 
             this.loading.loadComboboxEDTs("String");
@@ -201,31 +193,18 @@ namespace Addin
             this.loading.loadComboboxEDTs(curCombobox.SelectedValue.ToString());
         }
 
-        public void loadEnumTypes(object sender, EventArgs e)
-        {
-            ComboBox curCombobox = sender as ComboBox;
-
-            if (curCombobox.SelectedValue.ToString() == "Enum")
-            {
-                this.loading.loadComboboxEnum();
-            }
-        }
-
         public void fieldTypeChanged(object sender, EventArgs e)
         {
             ComboBox curCombobox = sender as ComboBox;
             FieldType fieldType;
 
             Metadata.MetaModel.AxEdt edt = null;
-
-            bool enumTypeEnabled = false;
-
-            this.comboBoxEnumType.SelectedIndex = -1;
+            
             this.comboBoxExtends.SelectedIndex = -1;
 
             Enum.TryParse<FieldType>(curCombobox.SelectedItem.ToString(), out fieldType);
 
-            if (this.comboBoxEDTName.SelectedIndex <= 0)
+            if (this.comboBoxEDTName.SelectedIndex == -1)
             {
                 if (this.comboBoxEDTName.Text != string.Empty)
                 {
@@ -236,25 +215,6 @@ namespace Addin
             {
                 edt = this.MetadataProvider.Edts.Read(this.comboBoxEDTName.SelectedItem.ToString());
             }
-
-            switch (fieldType)
-            {
-                case FieldType.Enum:
-                    if (edt == null)
-                    {
-                        enumTypeEnabled = true;
-                    }
-                    else
-                    {
-                        enumTypeEnabled = false;
-                    }
-                    break;
-                default:
-                    enumTypeEnabled = false;
-                    break;
-            }
-
-            comboBoxEnumType.Enabled = enumTypeEnabled;
         }
 
         public bool canClose()
