@@ -37,12 +37,15 @@
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Metadata">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\sk2zjkkk.bly\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSupport">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\sk2zjkkk.bly\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSystem">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\sk2zjkkk.bly\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -122,11 +125,12 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)'=='true'">
-    <PostBuildEvent>call "$(ProjectDir)\installtovs.bat" "$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="AfterBuildAction" Condition="'$(BuildingInsideVisualStudio)'=='true'" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <OutputFiles Include="$(MSBuildProjectDirectory)\$(OutputPath)\**\*.*" />
+    </ItemGroup>
+    <Message Text="Copying @(OutputFiles)" Importance="high" />
+    <Copy SourceFiles="@(OutputFiles)" DestinationFiles="@(OutputFiles->'$(DynamicsVSToolsHintPath)\AddinExtensions\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Message Text="Copying finished" Importance="high" />
+  </Target>
 </Project>
