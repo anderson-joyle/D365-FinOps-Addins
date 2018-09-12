@@ -54,6 +54,13 @@ namespace Addin
         }
         #endregion
 
+        public void loadComboboxEDTsAsync(string selected) //Called from UI
+        {
+            //this.loadComboboxEDTs(selected);
+            new Task(() => { loadComboboxEDTs(selected); }).Start();
+            //await Task.Run(() => this.loadComboboxEDTs(selected));
+        }
+
         public void loadComboboxEDTs(string selected)
         {
             FieldType fieldType;
@@ -63,6 +70,8 @@ namespace Addin
 
             this.comboBoxExtends.Items.Clear();
             this.comboBoxEDTName.Items.Clear();
+            this.comboBoxEDTName.Enabled = false;
+            this.comboBoxExtends.Enabled = false;
 
             switch (fieldType)
             {
@@ -115,7 +124,8 @@ namespace Addin
                 this.comboBoxEDTName.Items.Add(edtName);
                 this.progressBarExtends.PerformStep();
             }
-
+            this.comboBoxEDTName.Enabled = true;
+            this.comboBoxExtends.Enabled = true;
             this.comboBoxExtends.SelectedIndex = 0;
             this.comboBoxEDTName.SelectedIndex = 0;
         }

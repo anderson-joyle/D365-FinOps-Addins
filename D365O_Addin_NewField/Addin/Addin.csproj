@@ -126,6 +126,7 @@
     <PostBuildEvent>call "$(ProjectDir)\installtovs.bat" "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>call "$(ProjectDir)\installtovs.bat" "$(TargetPath)" "$(TargetDir)$(TargetName).pdb"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
