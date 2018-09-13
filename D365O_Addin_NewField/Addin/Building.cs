@@ -279,7 +279,7 @@ namespace Building
                         edtEnum.EnumType = this.controller.comboBoxFieldType.Text;
                         break;
                     case FieldType.Memo:
-                        edt.Extends = "FreTxt";
+                        edt.Extends = "FreeTxt";
                         break;
                     default:
                         break;
