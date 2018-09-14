@@ -74,7 +74,7 @@
             // toolStripStatusLabelVerboseTitle
             // 
             this.toolStripStatusLabelVerboseTitle.Name = "toolStripStatusLabelVerboseTitle";
-            this.toolStripStatusLabelVerboseTitle.Size = new System.Drawing.Size(55, 17);
+            this.toolStripStatusLabelVerboseTitle.Size = new System.Drawing.Size(54, 17);
             this.toolStripStatusLabelVerboseTitle.Text = "Verbose: ";
             // 
             // toolStripStatusLabelVerbose
@@ -178,6 +178,7 @@
             this.comboBoxEDTName.Location = new System.Drawing.Point(95, 68);
             this.comboBoxEDTName.Name = "comboBoxEDTName";
             this.comboBoxEDTName.Size = new System.Drawing.Size(398, 26);
+            this.comboBoxEDTName.Sorted = true;
             this.comboBoxEDTName.TabIndex = 4;
             // 
             // progressBarExtends
@@ -191,7 +192,6 @@
             // comboBoxExtends
             // 
             this.comboBoxExtends.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.comboBoxExtends.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExtends.FormattingEnabled = true;
             this.comboBoxExtends.Location = new System.Drawing.Point(95, 98);
             this.comboBoxExtends.Name = "comboBoxExtends";

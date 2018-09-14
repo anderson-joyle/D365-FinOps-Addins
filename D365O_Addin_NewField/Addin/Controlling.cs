@@ -73,8 +73,7 @@ namespace Addin
 
         public void init()
         {
-            this.comboBoxFieldType.SelectedIndexChanged += this.fieldTypeChanged;
-            this.comboBoxFieldType.SelectedIndexChanged += this.loadEDTNames;
+            
             this.comboBoxExtends.Leave += this.extendsLeave;
             this.comboBoxEDTName.Leave += this.edtLeave;
 
@@ -91,10 +90,14 @@ namespace Addin
             this.loading.progressBarExtends = progressBarExtends;
             this.comboBoxFieldType.DataSource = Enum.GetValues(typeof(FieldType));
 
-            this.loading.loadComboboxEDTs("String");
+            this.loading.loadComboboxEDTsAsync("String");
+            //this.loading.loadComboboxEDTs("String");
 
-            this.comboBoxEDTName.SelectedIndex = 0;
-            this.comboBoxExtends.SelectedIndex = 0;
+            //this.comboBoxEDTName.SelectedIndex = 0;
+            //this.comboBoxExtends.SelectedIndex = 0;
+
+            this.comboBoxFieldType.SelectedIndexChanged += this.fieldTypeChanged;
+            this.comboBoxFieldType.SelectedIndexChanged += this.loadEDTNames;
         }
 
         public bool prompt()

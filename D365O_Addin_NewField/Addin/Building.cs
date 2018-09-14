@@ -24,9 +24,7 @@ namespace Building
 
         protected FieldType fieldType;
         protected string fieldName;
-        protected int edtIndex;
         protected string edtText;
-        protected int extendsIndex;
         protected string extendsText;
         #endregion
 
@@ -96,9 +94,7 @@ namespace Building
             Enum.TryParse<FieldType>(this.controller.comboBoxFieldType.SelectedValue.ToString(), out fieldType);
 
             this.fieldName = this.controller.textBoxFieldName.Text;
-            this.edtIndex = this.controller.comboBoxEDTName.SelectedIndex;
             this.edtText = this.controller.comboBoxEDTName.Text;
-            this.extendsIndex = this.controller.comboBoxExtends.SelectedIndex;
             this.extendsText = this.controller.comboBoxExtends.Text;
         }
 
@@ -253,7 +249,7 @@ namespace Building
         {
             if (!edtExist)
             {
-                if (this.extendsIndex > 0 && this.extendsText != string.Empty)
+                if (this.extendsText != string.Empty)
                 {
                     AxEdt edtLocal = this.MetadataProvider.Edts.Read(this.extendsText);
 
@@ -283,7 +279,7 @@ namespace Building
                         edtEnum.EnumType = this.controller.comboBoxFieldType.Text;
                         break;
                     case FieldType.Memo:
-                        edt.Extends = "FreTxt";
+                        edt.Extends = "FreeTxt";
                         break;
                     default:
                         break;
