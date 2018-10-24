@@ -9,6 +9,8 @@ using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using Microsoft.Dynamics.Framework.Tools.Extensibility;
 using Microsoft.Dynamics.Framework.Tools.ProjectSystem;
+using EnvDTE;
+using System.Globalization;
 
 namespace Building
 {
@@ -138,6 +140,20 @@ namespace Building
 
             this.appendToProject(privilege);
         }
+        static VSProjectNode GetActiveProjectNode(DTE dte)
+        {
+            Array array = dte.ActiveSolutionProjects as Array;
+            if (array != null && array.Length > 0)
+            {
+                Project project = array.GetValue(0) as Project;
+                if (project != null)
+                {
+                    return project.Object as VSProjectNode;
+                }
+            }
+            return null;
+        }
+
 
         /// <summary>
         /// Append createds privilege to active project
@@ -146,8 +162,19 @@ namespace Building
         /// <remarks>This method could be improved. Most probably are better ways to achieve this goal.</remarks>
         protected void appendToProject(AxSecurityPrivilege privilege)
         {
-            var projectService = ServiceLocator.GetService(typeof(IDynamicsProjectService)) as IDynamicsProjectService;
-            projectService.AddElementToActiveProject(privilege);
+            DTE dte = CoreUtility.ServiceProvider.GetService(typeof(DTE)) as DTE;
+            if (dte == null)
+            {
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "No service for DTE found. The DTE must be registered as a service for using this API.", new object[0]));
+            }
+            VSProjectNode activeProjectNode = PrivilegeEngine.GetActiveProjectNode(dte);
+
+            activeProjectNode.AddModelElementsToProject(new List<MetadataReference>
+                    {
+                        new MetadataReference(privilege.Name, privilege.GetType())
+                    });
+            //var projectService = ServiceLocator.GetService(typeof(IDynamicsProjectService)) as IDynamicsProjectService;
+            //projectService.AddElementToActiveProject(privilege);
         }
     }
 }

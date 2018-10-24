@@ -54,6 +54,10 @@
             this.toolTipStringSize = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipEdtName = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipExtends = new System.Windows.Forms.ToolTip(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxLabel = new System.Windows.Forms.TextBox();
+            this.textBoxHelpText = new System.Windows.Forms.TextBox();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -65,10 +69,10 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelVerboseTitle,
             this.toolStripStatusLabelVerbose});
-            this.statusStrip.Location = new System.Drawing.Point(0, 199);
+            this.statusStrip.Location = new System.Drawing.Point(0, 275);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 21, 0);
-            this.statusStrip.Size = new System.Drawing.Size(510, 22);
+            this.statusStrip.Size = new System.Drawing.Size(621, 22);
             this.statusStrip.TabIndex = 1;
             // 
             // toolStripStatusLabelVerboseTitle
@@ -91,7 +95,7 @@
             this.toolStripButtonAbout});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(510, 25);
+            this.toolStrip.Size = new System.Drawing.Size(621, 25);
             this.toolStrip.TabIndex = 0;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -150,11 +154,15 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(510, 174);
+            this.tabControl1.Size = new System.Drawing.Size(621, 250);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPageGeneral
             // 
+            this.tabPageGeneral.Controls.Add(this.textBoxHelpText);
+            this.tabPageGeneral.Controls.Add(this.textBoxLabel);
+            this.tabPageGeneral.Controls.Add(this.label2);
+            this.tabPageGeneral.Controls.Add(this.label1);
             this.tabPageGeneral.Controls.Add(this.comboBoxEDTName);
             this.tabPageGeneral.Controls.Add(this.progressBarExtends);
             this.tabPageGeneral.Controls.Add(this.comboBoxExtends);
@@ -167,7 +175,7 @@
             this.tabPageGeneral.Location = new System.Drawing.Point(4, 27);
             this.tabPageGeneral.Name = "tabPageGeneral";
             this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGeneral.Size = new System.Drawing.Size(502, 143);
+            this.tabPageGeneral.Size = new System.Drawing.Size(613, 219);
             this.tabPageGeneral.TabIndex = 0;
             this.tabPageGeneral.Text = "General";
             this.tabPageGeneral.UseVisualStyleBackColor = true;
@@ -269,11 +277,45 @@
             this.toolTipExtends.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTipExtends.ToolTipTitle = "Extends";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(30, 145);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 18);
+            this.label1.TabIndex = 53;
+            this.label1.Text = "Label:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 177);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(69, 18);
+            this.label2.TabIndex = 54;
+            this.label2.Text = "Help text:";
+            // 
+            // textBoxLabel
+            // 
+            this.textBoxLabel.Location = new System.Drawing.Point(95, 145);
+            this.textBoxLabel.Name = "textBoxLabel";
+            this.textBoxLabel.Size = new System.Drawing.Size(398, 24);
+            this.textBoxLabel.TabIndex = 55;
+            this.toolTipFieldName.SetToolTip(this.textBoxLabel, "Newly created field name.");
+            // 
+            // textBoxHelpText
+            // 
+            this.textBoxHelpText.Location = new System.Drawing.Point(95, 177);
+            this.textBoxHelpText.Name = "textBoxHelpText";
+            this.textBoxHelpText.Size = new System.Drawing.Size(398, 24);
+            this.textBoxHelpText.TabIndex = 56;
+            this.toolTipFieldName.SetToolTip(this.textBoxHelpText, "Newly created field name.");
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 221);
+            this.ClientSize = new System.Drawing.Size(621, 297);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
@@ -322,5 +364,9 @@
         private System.Windows.Forms.ComboBox comboBoxEDTName;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelVerboseTitle;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelVerbose;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxHelpText;
+        private System.Windows.Forms.TextBox textBoxLabel;
     }
 }

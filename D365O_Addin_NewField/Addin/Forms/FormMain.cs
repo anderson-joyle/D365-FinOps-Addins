@@ -57,6 +57,8 @@ namespace Addin
             this.controlling.comboBoxEDTName = comboBoxEDTName;
             this.controlling.comboBoxExtends = comboBoxExtends;
             this.controlling.textBoxFieldName = textBoxFieldName;
+            this.controlling.textBoxLabel     = textBoxLabel;
+            this.controlling.textBoxHelpText  = textBoxHelpText;
             this.controlling.comboBoxFieldType = comboBoxFieldType;
             this.controlling.progressBarExtends = progressBarExtends;
             this.controlling.toolStripStatusLabelVerbose = toolStripStatusLabelVerbose;
