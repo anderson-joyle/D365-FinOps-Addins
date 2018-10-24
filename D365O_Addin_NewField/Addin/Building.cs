@@ -12,6 +12,8 @@ using Microsoft.Dynamics.Framework.Tools.ProjectSystem;
 using Metadata = Microsoft.Dynamics.AX.Metadata;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.Extensibility;
+using EnvDTE;
+using System.Globalization;
 
 namespace Building
 { 
@@ -26,6 +28,9 @@ namespace Building
         protected string fieldName;
         protected string edtText;
         protected string extendsText;
+
+        protected string labelText;
+        protected string helpTextText;
         #endregion
 
         #region Properties
@@ -93,9 +98,11 @@ namespace Building
 
             Enum.TryParse<FieldType>(this.controller.comboBoxFieldType.SelectedValue.ToString(), out fieldType);
 
-            this.fieldName = this.controller.textBoxFieldName.Text;
-            this.edtText = this.controller.comboBoxEDTName.Text;
-            this.extendsText = this.controller.comboBoxExtends.Text;
+            this.fieldName    = this.controller.textBoxFieldName.Text;
+            this.edtText      = this.controller.comboBoxEDTName.Text;
+            this.extendsText  = this.controller.comboBoxExtends.Text;
+            this.labelText    = this.controller.textBoxLabel.Text;
+            this.helpTextText = this.controller.textBoxHelpText.Text;
         }
 
         public void run()
@@ -258,6 +265,14 @@ namespace Building
                         edt.Extends = edtLocal.Name;
                     }
                 }
+                if (this.labelText != String.Empty)
+                {
+                    edt.Label = this.labelText;
+                }
+                if (this.helpTextText != String.Empty)
+                {
+                    edt.HelpText = this.helpTextText;
+                }
             }
         }
 
@@ -295,11 +310,36 @@ namespace Building
             {
                 axTableField.ExtendedDataType = edt.Name;
             }
+
+            if (edtExist)
+            {
+                if (this.labelText != String.Empty)
+                {
+                    axTableField.Label = this.labelText;
+                }
+                if (this.helpTextText != String.Empty)
+                {
+                    axTableField.HelpText = this.helpTextText;
+                }
+            }
         }
 
         protected void addSpecificPropertiesToField(Metadata.MetaModel.AxTableField axTableField)
         {
             return;
+        }
+        static VSProjectNode GetActiveProjectNode(DTE dte)
+        {
+            Array array = dte.ActiveSolutionProjects as Array;
+            if (array != null && array.Length > 0)
+            {
+                Project project = array.GetValue(0) as Project;
+                if (project != null)
+                {
+                    return project.Object as VSProjectNode;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -309,8 +349,20 @@ namespace Building
         /// <remarks>This method could be improved. Most probably are better ways to achieve this goal.</remarks>
         protected void appendToProject(AxEdt edt)
         {
-            var projectService = ServiceLocator.GetService(typeof(IDynamicsProjectService)) as IDynamicsProjectService;
-            projectService.AddElementToActiveProject(edt);
+            DTE dte = CoreUtility.ServiceProvider.GetService(typeof(DTE)) as DTE;
+            if (dte == null)
+            {
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "No service for DTE found. The DTE must be registered as a service for using this API.", new object[0]));
+            }
+            VSProjectNode activeProjectNode = NewFieldEngine.GetActiveProjectNode(dte);
+
+            activeProjectNode.AddModelElementsToProject(new List<MetadataReference>
+                    {
+                        new MetadataReference(edt.Name, edt.GetType())
+                    });
+
+            //var projectService = ServiceLocator.GetService(typeof(IDynamicsProjectService)) as IDynamicsProjectService;
+            //projectService.AddElementToActiveProject(edt);
         }
     }
 }
