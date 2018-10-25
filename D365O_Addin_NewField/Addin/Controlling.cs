@@ -21,6 +21,7 @@ namespace Addin
         public TextBox textBoxFieldName { set; get; }
         public TextBox textBoxLabel { set; get; }
         public TextBox textBoxHelpText { set; get; }
+        public TextBox textBoxStrLen { set; get; }
         public ComboBox comboBoxEDTName { set; get; }
         public ComboBox comboBoxExtends { set; get; }
         public ProgressBar progressBarExtends { set; get; }

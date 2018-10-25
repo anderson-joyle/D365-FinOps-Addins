@@ -62,6 +62,7 @@ namespace Addin
             this.controlling.comboBoxFieldType = comboBoxFieldType;
             this.controlling.progressBarExtends = progressBarExtends;
             this.controlling.toolStripStatusLabelVerbose = toolStripStatusLabelVerbose;
+            this.controlling.textBoxStrLen = textBoxStrLen;
 
             this.controlling.init();
 
