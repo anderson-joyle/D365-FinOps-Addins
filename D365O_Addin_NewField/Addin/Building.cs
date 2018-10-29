@@ -299,7 +299,12 @@ namespace Building
                         break;
                     case FieldType.Enum:
                         Metadata.MetaModel.AxEdtEnum edtEnum = edt as Metadata.MetaModel.AxEdtEnum;
-                        edtEnum.EnumType = this.controller.comboBoxFieldType.Text;
+                        Metadata.MetaModel.AxEdtEnum edtLocal = this.MetadataProvider.Edts.Read(this.extendsText) as Metadata.MetaModel.AxEdtEnum;
+
+                        if (edtEnum != null && edtLocal != null)
+                        {
+                            edtEnum.EnumType = edtLocal.EnumType;
+                        }
                         break;
                     case FieldType.Memo:
                         if (edt.Extends == String.Empty)
