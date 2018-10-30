@@ -127,7 +127,7 @@ namespace Building
             }
 
             this.addGeneralPropertiesToField(axTableField, axEdt);
-            this.addSpecificPropertiesToField(axTableField);
+            this.addSpecificPropertiesToField(axTableField, axEdt);
             this.addField(axTableField);
             
         }
@@ -340,9 +340,21 @@ namespace Building
             }
         }
 
-        protected void addSpecificPropertiesToField(Metadata.MetaModel.AxTableField axTableField)
+        protected void addSpecificPropertiesToField(Metadata.MetaModel.AxTableField axTableField, AxEdt edt)
         {
-            return;
+            switch (fieldType)
+            {
+                case FieldType.Enum:
+                    Metadata.MetaModel.AxEdtEnum        edtEnum = edt as Metadata.MetaModel.AxEdtEnum;
+                    Metadata.MetaModel.AxTableFieldEnum fieldEnum = axTableField as Metadata.MetaModel.AxTableFieldEnum;
+                    if (edtEnum != null && fieldEnum != null)
+                    {
+                        fieldEnum.EnumType = edtEnum.EnumType;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         static VSProjectNode GetActiveProjectNode(DTE dte)
         {
