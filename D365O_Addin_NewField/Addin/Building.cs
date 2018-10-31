@@ -31,6 +31,8 @@ namespace Building
 
         protected string labelText;
         protected string helpTextText;
+
+        protected int    newStrEDTLen;
         #endregion
 
         #region Properties
@@ -103,6 +105,8 @@ namespace Building
             this.extendsText  = this.controller.comboBoxExtends.Text;
             this.labelText    = this.controller.textBoxLabel.Text;
             this.helpTextText = this.controller.textBoxHelpText.Text;
+
+            int.TryParse(this.controller.textBoxStrLen.Text, out newStrEDTLen);
         }
 
         public void run()
@@ -123,7 +127,7 @@ namespace Building
             }
 
             this.addGeneralPropertiesToField(axTableField, axEdt);
-            this.addSpecificPropertiesToField(axTableField);
+            this.addSpecificPropertiesToField(axTableField, axEdt);
             this.addField(axTableField);
             
         }
@@ -288,13 +292,25 @@ namespace Building
                 {
                     case FieldType.String:
                         Metadata.MetaModel.AxEdtString edtString = edt as Metadata.MetaModel.AxEdtString;
+                        if (newStrEDTLen > 0 && edtString.Extends == String.Empty)
+                        {
+                            edtString.StringSize = newStrEDTLen;
+                        }
                         break;
                     case FieldType.Enum:
                         Metadata.MetaModel.AxEdtEnum edtEnum = edt as Metadata.MetaModel.AxEdtEnum;
-                        edtEnum.EnumType = this.controller.comboBoxFieldType.Text;
+                        Metadata.MetaModel.AxEdtEnum edtLocal = this.MetadataProvider.Edts.Read(this.extendsText) as Metadata.MetaModel.AxEdtEnum;
+
+                        if (edtEnum != null && edtLocal != null)
+                        {
+                            edtEnum.EnumType = edtLocal.EnumType;
+                        }
                         break;
                     case FieldType.Memo:
-                        edt.Extends = "FreeTxt";
+                        if (edt.Extends == String.Empty)
+                        {
+                            edt.Extends = "FreeTxt";
+                        }
                         break;
                     default:
                         break;
@@ -324,9 +340,21 @@ namespace Building
             }
         }
 
-        protected void addSpecificPropertiesToField(Metadata.MetaModel.AxTableField axTableField)
+        protected void addSpecificPropertiesToField(Metadata.MetaModel.AxTableField axTableField, AxEdt edt)
         {
-            return;
+            switch (fieldType)
+            {
+                case FieldType.Enum:
+                    Metadata.MetaModel.AxEdtEnum        edtEnum = edt as Metadata.MetaModel.AxEdtEnum;
+                    Metadata.MetaModel.AxTableFieldEnum fieldEnum = axTableField as Metadata.MetaModel.AxTableFieldEnum;
+                    if (edtEnum != null && fieldEnum != null)
+                    {
+                        fieldEnum.EnumType = edtEnum.EnumType;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         static VSProjectNode GetActiveProjectNode(DTE dte)
         {
